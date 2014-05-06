@@ -8,13 +8,14 @@ Usage:
 
 Options:
   -h --help           Show this screen.
-  -r --repeats=<rp>   Number of repeats [default: 100]
+  -r --repeats=<rp>   Number of repeats. Minimum 4. [default: 16]
   -t --min-time=<mt>  Shortest time that a run must take [default: 1]
   --test-N=<N>         The size of input to use for the test section [default: 100000]
 """
 
 import docopt
 import least_squares_regression
+import least_squares_regression_bytecode
 import numpy
 import terminal_bars
 
@@ -69,6 +70,11 @@ def orders_n(start=100, factor=2):
         yield int(x)
 
 functions = (
+    least_squares_regression_bytecode.bytecode_matrix_lstsqr,
+    least_squares_regression_bytecode.bytecode_auto_numpy_lstsqr,
+    least_squares_regression_bytecode.bytecode_auto2_numpy_lstsqr,
+    least_squares_regression_bytecode.bytecode_auto_scipy_lstsqr,
+    least_squares_regression_bytecode.bytecode_untyped_lstsqr,
     least_squares_regression.matrix_lstsqr,
     least_squares_regression.auto_numpy_lstsqr,
     least_squares_regression.auto2_numpy_lstsqr,
@@ -91,9 +97,11 @@ datasets[N] = x, y
 print("TEST:")
 print()
 
+namespace = max(len(function.__name__) for function in functions) + 1
+
 for function in functions:
     slope, intercept = function(*datasets[N])
-    print("{:<20} y = {:.10f}·x + {:.10f}".format(function.__name__+":", slope, intercept))
+    print("{:<{}} y = {:.10f}·x + {:.10f}".format(function.__name__+":", namespace, slope, intercept))
 
 print()
 print()

@@ -1,71 +1,101 @@
 TEST:
 
-matrix_lstsqr:       y = 0.9465858515·x + 2532.1851743207
-auto_numpy_lstsqr:   y = 0.9465858515·x + 2532.1851743214
-auto2_numpy_lstsqr:  y = 0.9465858515·x + 2532.1851743214
-auto_scipy_lstsqr:   y = 0.9465858515·x + 2532.1851743203
-untyped_lstsqr:      y = 0.9465858515·x + 2532.1851743203
-simply_typed_lstsqr: y = 0.9465858515·x + 2532.1851743203
-memoryview_lstsqr:   y = 0.9465858515·x + 2532.1851743203
-fully_typed_lstsqr:  y = 0.9465858515·x + 2532.1851743203
-parallel_lstsqr:     y = 0.9465858515·x + 2532.1851743212
+bytecode_matrix_lstsqr:      y = 0.9465858515·x + 2532.1851743207
+bytecode_auto_numpy_lstsqr:  y = 0.9465858515·x + 2532.1851743214
+bytecode_auto2_numpy_lstsqr: y = 0.9465858515·x + 2532.1851743214
+bytecode_auto_scipy_lstsqr:  y = 0.9465858515·x + 2532.1851743203
+bytecode_untyped_lstsqr:     y = 0.9465858515·x + 2532.1851743203
+matrix_lstsqr:               y = 0.9465858515·x + 2532.1851743207
+auto_numpy_lstsqr:           y = 0.9465858515·x + 2532.1851743214
+auto2_numpy_lstsqr:          y = 0.9465858515·x + 2532.1851743214
+auto_scipy_lstsqr:           y = 0.9465858515·x + 2532.1851743203
+untyped_lstsqr:              y = 0.9465858515·x + 2532.1851743203
+simply_typed_lstsqr:         y = 0.9465858515·x + 2532.1851743203
+memoryview_lstsqr:           y = 0.9465858515·x + 2532.1851743203
+fully_typed_lstsqr:          y = 0.9465858515·x + 2532.1851743203
+parallel_lstsqr:             y = 0.9465858515·x + 2532.1851743212
 
 
 TIME:
 
+bytecode_matrix_lstsqr
+  819200 items, 16 loops:  19.89 ns (± 91.63 ps)  per item  (1.048 s  total)
+
+bytecode_auto_numpy_lstsqr
+  409600 items, 16 loops:  40.96 ns (± 117.2 ps)  per item  (1.077 s  total)
+
+bytecode_auto2_numpy_lstsqr
+  409600 items, 16 loops:  72.87 ns (± 153.2 ps)  per item  (1.915 s  total)
+
+bytecode_auto_scipy_lstsqr
+ 1638400 items, 16 loops:  13.40 ns (± 80.19 ps)  per item  (1.412 s  total)
+
+bytecode_untyped_lstsqr
+    6400 items, 16 loops:  3.121 µs (± 7.433 ns)  per item  (1.281 s  total)
+
 matrix_lstsqr
-  409600 items, 100 loops:  24.53 ns (± 309.3 ps)  per item  (10.26 s  total)
+  819200 items, 16 loops:  20.05 ns (± 58.23 ps)  per item  (1.055 s  total)
 
 auto_numpy_lstsqr
-  409600 items, 100 loops:  46.39 ns (± 706.0 ps)  per item  (19.27 s  total)
+  409600 items, 16 loops:  41.12 ns (± 50.14 ps)  per item  (1.080 s  total)
 
 auto2_numpy_lstsqr
-  204800 items, 100 loops:  71.29 ns (± 1.293 ns)  per item  (14.82 s  total)
+  409600 items, 16 loops:  72.74 ns (± 79.85 ps)  per item  (1.909 s  total)
 
 auto_scipy_lstsqr
-  819200 items, 100 loops:  13.30 ns (± 22.06 ps)  per item  (10.93 s  total)
+ 1638400 items, 16 loops:  13.40 ns (± 17.43 ps)  per item  (1.406 s  total)
 
 untyped_lstsqr
-    6400 items, 100 loops:  3.010 µs (± 4.138 ns)  per item  (19.30 s  total)
+    6400 items, 16 loops:  2.975 µs (± 6.138 ns)  per item  (1.222 s  total)
 
 simply_typed_lstsqr
-   12800 items, 100 loops:  830.5 ns (± 883.6 ps)  per item  (10.65 s  total)
+   25600 items, 16 loops:  832.2 ns (± 1.629 ns)  per item  (1.367 s  total)
 
 memoryview_lstsqr
-   12800 items, 100 loops:  1.144 µs (± 22.70 ns)  per item  (14.80 s  total)
+   25600 items, 16 loops:  1.147 µs (± 3.316 ns)  per item  (1.885 s  total)
 
 fully_typed_lstsqr
- 6553600 items, 100 loops:  2.701 ns (± 15.68 ps)  per item  (17.88 s  total)
+ 6553600 items, 16 loops:  2.746 ns (± 30.59 ps)  per item  (1.161 s  total)
 
 parallel_lstsqr
- 6553600 items, 100 loops:  1.572 ns (± 29.73 ps)  per item  (10.41 s  total)
+13107200 items, 16 loops:  1.594 ns (± 14.60 ps)  per item  (1.346 s  total)
 
 
 
 SUMMARY:
 
-                       ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-       parallel_lstsqr ┃▏                                                                     ┃ 1.0
-    fully_typed_lstsqr ┃▎                                                                     ┃ 1.7
-     auto_scipy_lstsqr ┃█                                                                     ┃ 8.5
-         matrix_lstsqr ┃██                                                                    ┃ 16
-     auto_numpy_lstsqr ┃███▊                                                                  ┃ 30
-    auto2_numpy_lstsqr ┃█████▋                                                                ┃ 45
-   simply_typed_lstsqr ┃██████████████████████████████████████████████████████████████████    ┃ 528
-     memoryview_lstsqr ┃████████████████████████████████████████████████████████████████▓▓▒▒░░┃ 728
-        untyped_lstsqr ┃████████████████████████████████████████████████████████████████▓▓▒▒░░┃ 1915
-                       ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+                               ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+               parallel_lstsqr ┃▏                                                             ┃ 1.0
+            fully_typed_lstsqr ┃▎                                                             ┃ 1.7
+             auto_scipy_lstsqr ┃█                                                             ┃ 8.4
+    bytecode_auto_scipy_lstsqr ┃█                                                             ┃ 8.4
+        bytecode_matrix_lstsqr ┃█▌                                                            ┃ 12
+                 matrix_lstsqr ┃█▋                                                            ┃ 13
+    bytecode_auto_numpy_lstsqr ┃███▎                                                          ┃ 26
+             auto_numpy_lstsqr ┃███▎                                                          ┃ 26
+            auto2_numpy_lstsqr ┃█████▊                                                        ┃ 46
+   bytecode_auto2_numpy_lstsqr ┃█████▊                                                        ┃ 46
+           simply_typed_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 522
+             memoryview_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 720
+                untyped_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 1866
+       bytecode_untyped_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 1958
+                               ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
 Zoomed:
 
-                       ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-       parallel_lstsqr ┃███▌                                                                  ┃ 1.0
-    fully_typed_lstsqr ┃██████                                                                ┃ 1.7
-     auto_scipy_lstsqr ┃█████████████████████████████▋                                        ┃ 8.5
-         matrix_lstsqr ┃██████████████████████████████████████████████████████▋               ┃ 16
-     auto_numpy_lstsqr ┃████████████████████████████████████████████████████████████████▓▓▒▒░░┃ 30
-    auto2_numpy_lstsqr ┃████████████████████████████████████████████████████████████████▓▓▒▒░░┃ 45
-   simply_typed_lstsqr ┃████████████████████████████████████████████████████████████████▓▓▒▒░░┃ 528
-     memoryview_lstsqr ┃████████████████████████████████████████████████████████████████▓▓▒▒░░┃ 728
-        untyped_lstsqr ┃████████████████████████████████████████████████████████████████▓▓▒▒░░┃ 1915
-                       ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+                               ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+               parallel_lstsqr ┃███▏                                                          ┃ 1.0
+            fully_typed_lstsqr ┃█████▍                                                        ┃ 1.7
+             auto_scipy_lstsqr ┃██████████████████████████                                    ┃ 8.4
+    bytecode_auto_scipy_lstsqr ┃██████████████████████████                                    ┃ 8.4
+        bytecode_matrix_lstsqr ┃██████████████████████████████████████▋                       ┃ 12
+                 matrix_lstsqr ┃███████████████████████████████████████                       ┃ 13
+    bytecode_auto_numpy_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 26
+             auto_numpy_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 26
+            auto2_numpy_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 46
+   bytecode_auto2_numpy_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 46
+           simply_typed_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 522
+             memoryview_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 720
+                untyped_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 1866
+       bytecode_untyped_lstsqr ┃████████████████████████████████████████████████████████▓▓▒▒░░┃ 1958
+                               ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛

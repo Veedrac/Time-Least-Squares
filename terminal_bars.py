@@ -1,7 +1,7 @@
 node      = "█"
 remainder = " ▏▎▍▌▋▊▉"
 overflowstr = "▓▓▒▒░░"
-background = "░"
+background = " "
 
 barparts = {
 	"topleft":  "┏",
