@@ -19,11 +19,13 @@ import least_squares_regression_bytecode
 import numpy
 import terminal_bars
 
+from blessings import Terminal
 from decimal import Decimal
 from functools import partial
 from math import isnan, floor, log10
 from statistics import stdev, StatisticsError
 from timeit import Timer
+
 
 options = docopt.docopt(__doc__)
 N = int(options["--test-N"])
@@ -97,7 +99,7 @@ functions = (
     least_squares_regression.parallel_lstsqr,
 )
 
-function_times = {}
+function_times = dict.fromkeys(functions, float("inf"))
 datasets = {}
 
 numpy.random.seed(12345)
@@ -119,56 +121,108 @@ print()
 print("TIME:")
 print()
 
+
+
+def print_summary():
+    print()
+    print()
+    print("SUMMARY:")
+    print()
+
+    def simpleformatter(num):
+        if num < 10:
+            return str(round(num, 1))
+
+        else:
+            try:
+                return str(round(num))
+            except (ValueError, OverflowError):
+                return "NaN"
+
+    finaltimes = sorted(function_times.items(), key=lambda i: i[1])
+    besttime = finaltimes[0][1]
+
+    names = [function.__name__ for function, _ in finaltimes]
+    times = [time / besttime   for _, time     in finaltimes]
+
+    terminal_bars.plot(names, times, 200, formatter=simpleformatter)
+
+    print()
+    print("Zoomed:")
+    print()
+
+    terminal_bars.plot(names, times, 200, formatter=simpleformatter, maximum=times[0]*20)
+
+
+terminal = Terminal()
+space_needed = len(functions)*2 + 12
+
+import itertools
+from heapq import heappush, heappop
+
+pq = []                         # list of entries arranged in a heap
+entry_finder = {}               # mapping of tasks to entries
+REMOVED = object()              # placeholder for a removed task
+counter = itertools.count()     # unique sequence count
+
+def add_task(task, priority=0):
+    'Add a new task or update the priority of an existing task'
+    if task in entry_finder:
+        remove_task(task)
+    count = next(counter)
+    entry = [priority, count, task]
+    entry_finder[task] = entry
+    heappush(pq, entry)
+
+def remove_task(task):
+    'Mark an existing task as REMOVED.  Raise KeyError if not found.'
+    entry = entry_finder.pop(task)
+    entry[-1] = REMOVED
+
+def pop_task():
+    'Remove and return the lowest priority task. Raise KeyError if empty.'
+    while pq:
+        priority, count, task = heappop(pq)
+        if task is not REMOVED:
+            del entry_finder[task]
+            return task
+    raise KeyError('pop from an empty priority queue')
+
 for function in functions:
-    print(function.__name__)
+    add_task((function, orders_n()), 0)
 
-    for N in orders_n():
-        if N not in datasets:
-            numpy.random.seed(12345)
-            x = numpy.random.choice([0.8, 0.9, 1.0, 1.1], size=N) * numpy.arange(N)
-            y = numpy.random.choice([0.8, 0.9, 1.0, 1.1], size=N) * numpy.arange(N)
-            datasets[N] = x, y
 
-        numtimes = int(REPEATS ** 0.5)
-        times = []
-        functimer = Timer(partial(function, *datasets[N]))
-
-        for i in range(numtimes):
-            if i:
-                print(format_results(N, REPEATS, times, i/numtimes), end="\r")
-
-            times.append(functimer.timeit(REPEATS))
-
-        function_times[function] = min(times) / (REPEATS*N)
-        print(format_results(N, REPEATS, times), end="\r")
-
-        if sum(times) > MINTIME:
-            break
-
-    print()
+for _ in range(space_needed):
     print()
 
-print()
-print()
-print("SUMMARY:")
-print()
+while pq:
+    function, ngenerator = pop_task()
+    N = next(ngenerator)
 
-def simpleformatter(num):
-    if num < 10:
-        return str(round(num, 1))
-    else:
-        return str(round(num))
+    if N not in datasets:
+        numpy.random.seed(12345)
+        x = numpy.random.choice([0.8, 0.9, 1.0, 1.1], size=N) * numpy.arange(N)
+        y = numpy.random.choice([0.8, 0.9, 1.0, 1.1], size=N) * numpy.arange(N)
+        datasets[N] = x, y
 
-finaltimes = sorted(function_times.items(), key=lambda i: i[1])
-besttime = finaltimes[0][1]
+    numtimes = int(REPEATS ** 0.5)
+    times = []
+    functimer = Timer(partial(function, *datasets[N]))
 
-names = [function.__name__ for function, _ in finaltimes]
-times = [time / besttime   for _, time     in finaltimes]
+    for i in range(numtimes):
+        times.append(functimer.timeit(REPEATS))
 
-terminal_bars.plot(names, times, 100, formatter=simpleformatter)
+    for _ in range(space_needed):
+        print(terminal.move_up(), end="")
 
-print()
-print("Zoomed:")
-print()
+    print("{:>30}   {}   {}".format(
+        function.__name__,
+        format_constant_space(N, ""),
+        format_constant_space(sum(times), "s")
+    ))
+    print_summary()
 
-terminal_bars.plot(names, times, 100, formatter=simpleformatter, maximum=times[0]*20)
+    function_times[function] = min(times) / (REPEATS*N)
+
+    if sum(times) < MINTIME:
+        add_task((function, ngenerator), sum(times))
